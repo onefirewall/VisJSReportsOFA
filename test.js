@@ -1,10 +1,8 @@
 var elasticsearch=require('elasticsearch');
 
 var client = new elasticsearch.Client( {  
-    hosts: [
-      'http://192.168.43.56:9200/',
-    ]
-  });
+    hosts: [  'http://192.168.43.56:9200/' ]
+});
 
 module.exports = client;  
 
@@ -18,37 +16,52 @@ client.count({index: 'ofa-ips',type: '_doc'},function(err,resp,status) {
 });
 */
 
+
 items = [
 
 ]
-for(xxx=0;xxx<10;xxx++){
-    console.log(xxx)
+
+function print_data(){
+  console.log(items)
+}
+function count_count(cnt){
+    minutes_mult = 60
+    from_string = new Date(new Date()-(cnt)*minutes_mult*60*1000).toISOString()
+    to_string = new Date(new Date()-(cnt-1)*minutes_mult*60*1000).toISOString()
+
     client.count(
-        {  
+          {  
             index: 'ofa-ips',
             type: '_doc',
             body: {
               query: {
                 range : {
                     event_ts : {
-                        gte : "now-1m",
-                        lt :  "now"
+                        gte : from_string,
+                        lt :  to_string
                     }
                 }
               },
             }
-          }
-          ,
-          function(err,resp,status) {  
-                //console.log(resp.count);
-                console.log(xxx)
-                obj = {x: "a", y: resp.count}
+          },
+          function(err,resp,status) { 
+                obj = {x: to_string.slice(0,19), y: resp.count, cnt: cnt}
                 items.push(obj)
-                if(xxx<=9){
-                    console.print(items)
+                if(cnt>1){
+                    count_count(cnt-1)
+                }else{
+                    print_data()
                 }
-          });
+                
+            }
+    );
 }
+
+//console.log(new Date(new Date()).toISOString().slice(0,10))
+
+count_count(10)
+
+
 
 
 /*

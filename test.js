@@ -1,4 +1,6 @@
 var elasticsearch=require('elasticsearch');
+const ipInt = require('ip-to-int');
+
 
 var client = new elasticsearch.Client( {  
     hosts: [  'http://192.168.43.56:9200/' ]
@@ -10,61 +12,8 @@ client.cluster.health({},function(err,resp,status) {
     //console.log("-- Client Health --",resp);
 });
 
-/*
-client.count({index: 'ofa-ips',type: '_doc'},function(err,resp,status) {  
-    console.log("constituencies",resp);
-});
-*/
 
 
-items = [
-
-]
-
-function print_data(){
-  console.log(items)
-}
-function count_count(cnt){
-    minutes_mult = 60
-    from_string = new Date(new Date()-(cnt)*minutes_mult*60*1000).toISOString()
-    to_string = new Date(new Date()-(cnt-1)*minutes_mult*60*1000).toISOString()
-
-    client.count(
-          {  
-            index: 'ofa-ips',
-            type: '_doc',
-            body: {
-              query: {
-                range : {
-                    event_ts : {
-                        gte : from_string,
-                        lt :  to_string
-                    }
-                }
-              },
-            }
-          },
-          function(err,resp,status) { 
-                obj = {x: to_string.slice(0,19), y: resp.count, cnt: cnt}
-                items.push(obj)
-                if(cnt>1){
-                    count_count(cnt-1)
-                }else{
-                    print_data()
-                }
-                
-            }
-    );
-}
-
-//console.log(new Date(new Date()).toISOString().slice(0,10))
-
-count_count(10)
-
-
-
-
-/*
 console.log("==================")
 client.search({  
     index: 'ofa-ips',
@@ -73,12 +22,12 @@ client.search({
       query: {
         range : {
             event_ts : {
-                gte : "now-1m",
+                gte : "now-60m",
                 lt :  "now"
             }
         }
       },
-      size: 10000
+      size: 1000
     }
   },function (error, response,status) {
       if (error){
@@ -89,13 +38,19 @@ client.search({
         //console.log(response);
         console.log((response.hits.hits.length))
         console.log("--- Hits ---");
-        
+        var random = Math.random
+        items = [  ]
+        console.log(Math.floor(Math.random() * Math.floor(100)))
         response.hits.hits.forEach(function(hit){
-          console.log(hit);
+          rand_num = Math.floor(Math.random() * Math.floor(1000000))
+          obj = {x:ipInt(hit._source.src_ip).toInt(),z:parseInt(hit._source.live_score),y:rand_num,style:1}
+          if(obj.z>70){
+            items.push(obj)
+          }
+
+          //console.log(ipInt(hit._source.src_ip).toInt() + " " + parseInt(hit._source.live_score))
         })
-        
+        console.log(items)
       }
   })
-  */
-  
   

@@ -17,24 +17,39 @@ client.count({index: 'ofa-ips',type: '_doc'},function(err,resp,status) {
     console.log("constituencies",resp);
 });
 */
-client.count(
-    {  
-        index: 'ofa-ips',
-        type: '_doc',
-        body: {
-          query: {
-            range : {
-                event_ts : {
-                    gte : "now-1m",
-                    lt :  "now"
+
+items = [
+
+]
+for(xxx=0;xxx<10;xxx++){
+    console.log(xxx)
+    client.count(
+        {  
+            index: 'ofa-ips',
+            type: '_doc',
+            body: {
+              query: {
+                range : {
+                    event_ts : {
+                        gte : "now-1m",
+                        lt :  "now"
+                    }
                 }
+              },
             }
-          },
-        }
-      }
-      ,function(err,resp,status) {  
-    console.log(resp.count);
-});
+          }
+          ,
+          function(err,resp,status) {  
+                //console.log(resp.count);
+                console.log(xxx)
+                obj = {x: "a", y: resp.count}
+                items.push(obj)
+                if(xxx<=9){
+                    console.print(items)
+                }
+          });
+}
+
 
 /*
 console.log("==================")

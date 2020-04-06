@@ -3,148 +3,61 @@
 <html>
 <head>
 
-  <style>
-    body {font: 10pt arial;}
-  </style>
-
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://visjs.github.io/vis-graph3d/dist/vis-graph3d.min.js"></script>
-
   <script type="text/javascript">
-    var data = null;
-    var graph = null;
 
-    function onclick(point) {
-      console.log(point);
-    }
-
-    // Called when the Visualization API is loaded.
-    function drawVisualization() {
-      // create the data table.
-      data = new vis.DataSet();
-
-      // create some shortcuts to math functions
-      var sqrt = Math.sqrt;
-      var pow = Math.pow;
-      var random = Math.random;
-
-      items = [ { x: 2885047270, z: 73, y: 360523, style: 1 },
-  { x: 2885053643, z: 73, y: 921475, style: 2 },
-  { x: 3699862867, z: 73, y: 8382, style: 3 },
-  { x: 2885069154, z: 73, y: 400885, style: 4 },
-  { x: 2885170925, z: 73, y: 724776, style: 5 },
-  { x: 3699867624, z: 73, y: 615702, style: 6 },
-  { x: 2885100055, z: 73, y: 721490, style: null },
-  { x: 2885084562, z: 73, y: 596386, style: null },
-  { x: 3699813229, z: 73, y: 371444, style: null },
-  { x: 3699821424, z: 73, y: 856161, style: null },
-  { x: 3699823133, z: 73, y: 941074, style: null },
-  { x: 3699816474, z: 73, y: 901505, style: null },
-  { x: 3699820029, z: 73, y: 997452, style: null },
-  { x: 3699819743, z: 73, y: 686815, style: null },
-  { x: 3699832324, z: 73, y: 541290, style: null },
-  { x: 3699843729, z: 73, y: 541723, style: null },
-  { x: 3699839532, z: 73, y: 894397, style: null },
-  { x: 3699888891, z: 73, y: 926963, style: null },
-  { x: 3689632777, z: 73, y: 431684, style: null },
-  { x: 3690336367, z: 73, y: 410094, style: null },
-  { x: 3683845530, z: 73, y: 519176, style: null },
-  { x: 3683739851, z: 74, y: 564189, style: null },
-  { x: 3695675045, z: 73, y: 373136, style: null },
-  { x: 3684634117, z: 73, y: 949197, style: null },
-  { x: 3684634124, z: 73, y: 902635, style: null },
-  { x: 3689324343, z: 73, y: 383759, style: null },
-  { x: 3684679803, z: 73, y: 980002, style: null },
-  { x: 3684679685, z: 73, y: 757762, style: null },
-  { x: 3695844910, z: 73, y: 4392, style: null },
-  { x: 3695756382, z: 73, y: 498438, style: null },
-  { x: 3684111920, z: 73, y: 756015, style: null },
-  { x: 3684112081, z: 74, y: 224307, style: null },
-  { x: 3683962454, z: 74, y: 368769, style: null },
-  { x: 3684096755, z: 73, y: 57879, style: null },
-  { x: 3684097060, z: 74, y: 857403, style: null },
-  { x: 3684245434, z: 83, y: 905763, style: null },
-  { x: 3697056250, z: 73, y: 954598, style: null },
-  { x: 3696893829, z: 73, y: 791600, style: null },
-  { x: 3697177931, z: 73, y: 683558, style: null },
-  { x: 2006650464, z: 73, y: 616774, style: null },
-  { x: 3696300381, z: 73, y: 161803, style: null },
-  { x: 2007309481, z: 73, y: 867418, style: null },
-  { x: 3698396984, z: 73, y: 757912, style: null },
-  { x: 2006159395, z: 73, y: 556758, style: null },
-  { x: 3696310599, z: 73, y: 27250, style: null },
-  { x: 2006229076, z: 73, y: 404790, style: null },
-  { x: 3696271493, z: 73, y: 140407, style: null },
-  { x: 3696467735, z: 73, y: 789419, style: null },
-  { x: 2008151547, z: 73, y: 792535, style: null },
-  { x: 2008484789, z: 73, y: 688496, style: null },
-  { x: 2008871456, z: 73, y: 639308, style: null },
-  { x: 2971075660, z: 72, y: 927614, style: null },
-  { x: 2970239992, z: 73, y: 753977, style: null },
-  { x: 2009788533, z: 73, y: 429709, style: null },
-  { x: 1879252540, z: 102, y: 650856, style: null },
-  { x: 2010015879, z: 73, y: 320192, style: null },
-  { x: 2968619377, z: 73, y: 410627, style: null },
-  { x: 2011340557, z: 73, y: 742228, style: null },
-  { x: 2973157785, z: 74, y: 261835, style: null },
-  { x: 2972149399, z: 74, y: 445232, style: null },
-  { x: 2028618750, z: 72, y: 254516, style: null },
-  { x: 2028802434, z: 77, y: 173575, style: null },
-  { x: 2972180153, z: 74, y: 224183, style: null },
-  { x: 2972995735, z: 74, y: 53883, style: null },
-  { x: 2028000802, z: 73, y: 227547, style: null },
-  { x: 2027957636, z: 73, y: 27120, style: null },
-  { x: 2030961202, z: 72, y: 585334, style: null },
-  { x: 2031061385, z: 72, y: 449974, style: null },
-  { x: 2031068601, z: 72, y: 694823, style: null },
-  { x: 2031000621, z: 72, y: 740542, style: null },
-  { x: 2030965160, z: 72, y: 678989, style: null },
-  { x: 2031088698, z: 72, y: 286351, style: null },
-  { x: 2997459338, z: 74, y: 239549, style: null },
-  { x: 2032457743, z: 72, y: 90041, style: null },
-  { x: 2997442305, z: 74, y: 415080, style: null },
-  { x: 2031912418, z: 72, y: 232219, style: null },
-  { x: 2031911909, z: 72, y: 29223, style: null },
-  { x: 2995335820, z: 74, y: 251317, style: null },
-  { x: 2033092153, z: 72, y: 748428, style: null },
-  { x: 2997941634, z: 74, y: 340032, style: null },
-  { x: 2033506037, z: 72, y: 247055, style: null },
-  { x: 2033506256, z: 72, y: 946081, style: null },
-  { x: 2996240355, z: 74, y: 167572, style: null },
-  { x: 2996268962, z: 74, y: 660038, style: null } ]
+          function onload(){
+                    jQuery.ajax({
+                          url: '/api/v1/3d_data',
+                          datatype: 'json',
+                          contentType: "application/json; charset=utf-8",
+                          type: 'get',
+                          success: function (msg) {
+                            drawVisualization(msg)
+                          },
+                          error: function (msg) {
+                              alert("error :( ")
+                          }
+                    });
+          }
 
 
+          function drawVisualization(msg) {
+              var data = null;
+              var graph = null;
+              data = new vis.DataSet();
+              data.add(msg)
+              var options = {
+                width:  '900px',
+                height: '800px',
+                style: 'dot-size',
+                xLabel: "IPv4",
+                zLabel: "Crime-Score",
+                showPerspective: false,
+                showShadow: true,
+                showGrid: true,
+                keepAspectRatio: true,
+                legendLabel:'value',
+                verticalRatio: 1.0,
+                cameraPosition: {
+                  horizontal: -0.54,
+                  vertical: 0.5,
+                  distance: 1.6
+                },
+                dotSizeMinFraction: 0.5,
+                dotSizeMaxFraction: 2.5
+              };
 
+              var container = document.getElementById('mygraph');
+              graph = new vis.Graph3d(container, data, options);
+          }
 
-      data.add(items)
-
-      var options = {
-        width:  '100%',
-        height: '1000px',
-        style: 'dot-color',
-        showPerspective: true,
-        showGrid: true,
-        keepAspectRatio: true,
-        verticalRatio: 1.0,
-        legendLabel: 'distance',
-        cameraPosition: {
-          horizontal: -0.54,
-          vertical: 0.5,
-          distance: 1.6
-        }
-      };
-
-      // create our graph
-      var container = document.getElementById('mygraph');
-      graph = new vis.Graph3d(container, data, options);
-      graph.on('click', onclick);
-    }
   </script>
-  
 </head>
 
-<body onload="drawVisualization()">
+<body onload="onload()">
 <div id="mygraph"></div>
 
-<div id="info"></div>
 </body>
 </html>
